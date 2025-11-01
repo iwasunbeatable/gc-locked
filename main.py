@@ -5,7 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
-# Settings
+# Settings — replace these with your info
 INSTAGRAM_USERNAME = 'hmu.brachorr'
 INSTAGRAM_PASSWORD = 'sammy2301@@@@'
 GROUP_CHAT_URL = 'https://www.instagram.com/direct/t/1184750303514319/'  # Your group chat URL
@@ -13,16 +13,21 @@ LOCKED_GROUP_NAME = 'Your Locked Group Name'
 
 def login(driver):
     driver.get('https://www.instagram.com/accounts/login/')
-    wait = WebDriverWait(driver, 15)
-    # Wait for username input
+    wait = WebDriverWait(driver, 30)
     username_input = wait.until(EC.visibility_of_element_located((By.NAME, 'username')))
     password_input = driver.find_element(By.NAME, 'password')
     username_input.send_keys(INSTAGRAM_USERNAME)
     password_input.send_keys(INSTAGRAM_PASSWORD)
     password_input.send_keys(Keys.RETURN)
-    # Wait for main page to load after login
-    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'nav')))
-    print("Logged in successfully")
+
+    print("Waiting for login to complete...")
+    try:
+        # Wait for Direct icon that shows successful login
+        wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'svg[aria-label="Direct"]')))
+        print("Logged in successfully.")
+    except Exception:
+        print("Login may require captcha or 2FA. Check browser.")
+        time.sleep(30)  # Pause for manual intervention
 
 def check_and_lock_group_name(driver):
     driver.get(GROUP_CHAT_URL)
@@ -34,7 +39,7 @@ def check_and_lock_group_name(driver):
     print("Opened chat details")
     time.sleep(2)  # wait for the panel to open
 
-    # Wait for input box of group name (adjust selector if needed)
+    # Wait for input box of group name (update selector if needed)
     group_name_input = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'input[placeholder="Name this group chat"]')))
     current_name = group_name_input.get_attribute('value')
 
@@ -49,13 +54,12 @@ def check_and_lock_group_name(driver):
     time.sleep(2)
 
 def main():
-    driver = webdriver.Chrome()  # Make sure chromedriver is in PATH
+    driver = webdriver.Chrome()  # Ensure chromedriver matches your Chrome version and is in PATH
     try:
         login(driver)
         while True:
             check_and_lock_group_name(driver)
-            # Wait 60 seconds before checking again
-            time.sleep(60)
+            time.sleep(60)  # Check every 60 seconds
     finally:
         driver.quit()
 
