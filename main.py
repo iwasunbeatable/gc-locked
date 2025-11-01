@@ -4,7 +4,7 @@ from selenium.webdriver.common.keys import Keys
 import time
 
 # Settings
-INSTAGRAM_USERNAME = 'hmu.brachor'
+INSTAGRAM_USERNAME = 'hmu.brachorr'
 INSTAGRAM_PASSWORD = 'sammy2301@@@@'
 GROUP_CHAT_URL = 'https://www.instagram.com/direct/t/1184750303514319/'  # Replace with your group chat URL
 LOCKED_GROUP_NAME = 'Your Locked Group Name'
